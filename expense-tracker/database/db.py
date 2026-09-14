@@ -13,6 +13,30 @@ def get_db():
     return conn
 
 
+def get_user_by_email(email):
+    conn = get_db()
+    cur = conn.cursor()
+    row = cur.execute(
+        "SELECT * FROM users WHERE email = ?",
+        (email,),
+    ).fetchone()
+    conn.close()
+    return row
+
+
+def create_user(name, email, password_hash):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+        (name, email, password_hash),
+    )
+    conn.commit()
+    new_id = cur.lastrowid
+    conn.close()
+    return new_id
+
+
 def init_db():
     conn = get_db()
     conn.executescript("""
