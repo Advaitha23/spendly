@@ -24,6 +24,17 @@ def get_user_by_email(email):
     return row
 
 
+def get_user_by_id(user_id):
+    conn = get_db()
+    cur = conn.cursor()
+    row = cur.execute(
+        "SELECT * FROM users WHERE id = ?",
+        (user_id,),
+    ).fetchone()
+    conn.close()
+    return row
+
+
 def create_user(name, email, password_hash):
     conn = get_db()
     cur = conn.cursor()
